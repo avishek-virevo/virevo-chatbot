@@ -2,18 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "public/**",
-      "use": "@vercel/static"
-    },
-    {
       "src": "api/**/*.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "src": "/chat",
+      "dest": "/api/chat.js"
     },
     {
       "src": "/(.*)",
@@ -21,20 +21,3 @@
     }
   ]
 }
-```
-
----
-
-### **Step 3: Also Check Your `api/chat.js` File Location**
-
-Make sure your file structure looks EXACTLY like this:
-```
-virevo-chatbot/
-├── api/
-│   └── chat.js          ← Your API file
-├── knowledge/
-│   └── (your .md files)
-├── public/
-│   └── index.html       ← Your frontend
-├── vercel.json          ← THIS FILE IS CRITICAL
-└── package.json
