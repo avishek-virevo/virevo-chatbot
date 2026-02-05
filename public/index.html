@@ -757,21 +757,31 @@
             }, CONFIG.bubbleAutoCloseDelay);
         });
 
-        // Toggle chat window
-        function toggleChat() {
-            const chatWindow = document.getElementById('chatWindow');
-            const messageBubble = document.getElementById('messageBubble');
-            
-            isOpen = !isOpen;
-            
-            if (isOpen) {
-                chatWindow.classList.add('open');
-                messageBubble.classList.add('hidden');
-                document.getElementById('chatInput').focus();
-            } else {
-                chatWindow.classList.remove('open');
-            }
+   // Toggle chat window
+function toggleChat() {
+    const chatWindow = document.getElementById('chatWindow');
+    const messageBubble = document.getElementById('messageBubble');
+    
+    isOpen = !isOpen;
+    
+    if (isOpen) {
+        chatWindow.classList.add('open');
+        messageBubble.classList.add('hidden');
+        document.getElementById('chatInput').focus();
+        
+        // Notify parent window that chat is open
+        if (window.parent !== window) {
+            window.parent.postMessage({ chatOpened: true }, '*');
         }
+    } else {
+        chatWindow.classList.remove('open');
+        
+        // Notify parent window that chat is closed
+        if (window.parent !== window) {
+            window.parent.postMessage({ chatClosed: true }, '*');
+        }
+    }
+}
 
         // Close message bubble
         function closeMessageBubble(event) {
@@ -939,6 +949,13 @@
         function hideTypingIndicator() {
             document.getElementById('typingIndicator').classList.remove('active');
         }
+
+        // Listen for messages from parent window
+window.addEventListener('message', function(event) {
+    if (event.data && event.data.action === 'openChat') {
+        openChat(event.data.message);
+    }
+});
     </script>
 </body>
 </html>
