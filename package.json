@@ -1,0 +1,14 @@
+{
+  "name": "virevo-chatbot-backend",
+  "version": "1.0.0",
+  "description": "Backend for Virevo's Tojo chatbot powered by Claude AI",
+  "main": "api/chat.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": ["chatbot", "claude", "virevo", "tojo"],
+  "author": "Virevo",
+  "license": "MIT",
+  "dependencies": {}
+}
