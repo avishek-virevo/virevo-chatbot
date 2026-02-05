@@ -1,9 +1,8 @@
 // api/chat.js
 // Serverless function for Vercel - Virevo Chatbot Backend
-// This handles all chat requests and integrates with Claude API
 
-const fs = require('fs');
-const path = require('path');
+import { readFile } from 'fs/promises';
+import { join } from 'path';
 
 export default async function handler(req, res) {
     // Enable CORS
@@ -113,12 +112,9 @@ Remember: You represent Virevo's professionalism and expertise. Be helpful, warm
     }
 }
 
-// Function to load all knowledge base files
+// Function to load all knowledge base files - FIXED FOR VERCEL
 async function loadKnowledgeBase() {
     try {
-        // In Vercel, we need to use __dirname to find files
-        const knowledgeDir = path.join(process.cwd(), 'knowledge');
-        
         // Knowledge base files in order
         const knowledgeFiles = [
             '01-bot-personality.md',
@@ -134,8 +130,9 @@ async function loadKnowledgeBase() {
 
         for (const file of knowledgeFiles) {
             try {
-                const filePath = path.join(knowledgeDir, file);
-                const content = fs.readFileSync(filePath, 'utf-8');
+                // Use process.cwd() which works in Vercel
+                const filePath = join(process.cwd(), 'knowledge', file);
+                const content = await readFile(filePath, 'utf-8');
                 knowledgeBase += `\n\n${content}\n\n`;
             } catch (fileError) {
                 console.warn(`Could not load ${file}:`, fileError.message);
@@ -157,4 +154,3 @@ async function loadKnowledgeBase() {
         return `You are Tojo, Virevo's intelligent assistant. Help visitors understand Virevo's services. Guide them to book a call at https://calendly.com/avishek-virevo/30min`;
     }
 }
-
