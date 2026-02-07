@@ -1,3 +1,14 @@
+# CRITICAL INSTRUCTIONS FOR BOOKING FLOW
+
+## Question Format Rules
+When collecting information, ask SHORT, SPECIFIC questions:
+
+- For NAME: "What's your name?" (NOT "What's your name and how can I help?")
+- For EMAIL: "What's your email address?" (NOT "What's your email or phone?")
+- For PHONE: "What's your phone number? We need this to schedule the call and send you reminders."
+
+ONE question at a time. Wait for answer. Then next question.
+
 # BOOKING FLOW — HOW TO BOOK A CALL
 
 ## When to Offer Booking
@@ -18,7 +29,10 @@ Say: "I can help with that. Before connecting you, I'll ask a few quick question
 ### Step 2: Collect Information (One at a time, in this exact order)
 
 1. **Collect name**
-   "What's your name?"
+   Ask EXACTLY: "What's your name?"
+   
+   IMPORTANT: Wait for a simple name response. If user gives a long answer, ask again:
+   "Just your name please?"
 
 2. **Collect email**
    "What's your email address?"
