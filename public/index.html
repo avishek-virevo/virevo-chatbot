@@ -854,33 +854,39 @@ conversationHistory.push({
 // Detect contact information
 const detected = detectContactInfo(message);
 
-if (detected.email) {
+if (detected.email && !contactInfo.email) {
     contactInfo.email = detected.email;
-}
-if (detected.phone) {
-    contactInfo.phone = detected.phone;
+    console.log('Email detected:', detected.email);
 }
 
-// If we have name (from previous message context) and email, send transcript
-if (contactInfo.email && conversationHistory.length > 2) {
-    // Try to extract name from conversation
+if (detected.phone && !contactInfo.phone) {
+    contactInfo.phone = detected.phone;
+    console.log('Phone detected:', detected.phone);
+}
+
+// Try to extract name from conversation if not already set
+if (!contactInfo.name) {
     const nameMention = conversationHistory.find(msg => 
         msg.role === 'user' && 
         (msg.content.toLowerCase().includes('my name is') || 
          msg.content.toLowerCase().includes('i am') ||
-         msg.content.toLowerCase().includes('i\'m'))
+         msg.content.toLowerCase().includes('i\'m') ||
+         msg.content.toLowerCase().includes('this is'))
     );
     
     if (nameMention) {
-        const nameMatch = nameMention.content.match(/(?:my name is|i am|i'm)\s+([a-zA-Z]+)/i);
-        contactInfo.name = nameMatch?.[1] || 'Visitor';
+        const nameMatch = nameMention.content.match(/(?:my name is|i am|i'm|this is)\s+([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i);
+        if (nameMatch && nameMatch[1]) {
+            contactInfo.name = nameMatch[1].trim();
+            console.log('Name detected:', contactInfo.name);
+        }
     }
-    
-    // Send transcript
-    sendTranscript(contactInfo.name, contactInfo.email, contactInfo.phone);
-    
-    // Reset contact info
-    contactInfo = { name: null, email: null, phone: null };
+}
+
+// Store flag to send transcript after bot's final thank you message
+if (contactInfo.name && contactInfo.email && contactInfo.phone && !contactInfo.readyToSend) {
+    contactInfo.readyToSend = true;
+    console.log('All contact info collected, will send transcript after thank you message');
 }
             
             // Show typing indicator
@@ -920,7 +926,24 @@ if (contactInfo.email && conversationHistory.length > 2) {
                 hideTypingIndicator();
                 
                 // Add bot message to UI
-                addMessage(botReply, 'bot');
+addMessage(botReply, 'bot');
+
+// Check if this is the final thank you message AND we have all contact info
+if (contactInfo.readyToSend && 
+    botReply.toLowerCase().includes('thank you') && 
+    (botReply.toLowerCase().includes('looking forward') || 
+     botReply.toLowerCase().includes('reach out'))) {
+    
+    console.log('Final thank you detected, sending transcript...');
+    
+    // Wait a moment for the message to display, then send transcript
+    setTimeout(() => {
+        sendTranscript(contactInfo.name, contactInfo.email, contactInfo.phone);
+        
+        // Reset contact info
+        contactInfo = { name: null, email: null, phone: null, readyToSend: false };
+    }, 1000);
+}
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -1032,7 +1055,8 @@ async function sendTranscript(name, email, phone) {
 let contactInfo = {
     name: null,
     email: null,
-    phone: null
+    phone: null,
+    readyToSend: false
 };
     </script>
 </body>
