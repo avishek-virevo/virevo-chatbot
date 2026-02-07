@@ -12,3 +12,8 @@
   "license": "MIT",
   "dependencies": {}
 }
+{
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.0"
+  }
+}
