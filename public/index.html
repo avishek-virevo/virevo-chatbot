@@ -957,7 +957,11 @@ function toggleChat() {
 window.addEventListener('message', function(event) {
     if (event.data && event.data.action === 'openChat') {
         openChat(event.data.message);
-    }
+    } } else if (event.data && event.data.action === 'checkChatState') {
+        // Send current chat state to parent
+        window.parent.postMessage({ 
+            chatState: isOpen ? 'open' : 'closed' 
+        }, '*');
 });
     </script>
 </body>
