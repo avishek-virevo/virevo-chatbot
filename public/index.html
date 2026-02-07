@@ -928,17 +928,21 @@ if (contactInfo.name && contactInfo.email && contactInfo.phone && !contactInfo.r
                 // Add bot message to UI
 addMessage(botReply, 'bot');
 
-// Check if this is the final thank you message AND we have all contact info
+// Check if we should send transcript
+// Trigger ONLY when bot says "I'm sending you a transcript"
 if (contactInfo.readyToSend && 
-    botReply.toLowerCase().includes('thank you') && 
-    (botReply.toLowerCase().includes('looking forward') || 
-     botReply.toLowerCase().includes('reach out'))) {
+    botReply.toLowerCase().includes("i'm sending you a transcript")) {
     
-    console.log('Final thank you detected, sending transcript...');
+    console.log('Email trigger phrase detected, sending transcript...');
     
-    // Wait a moment for the message to display, then send transcript
+    // Wait a brief moment for the message to display, then send transcript
     setTimeout(() => {
         sendTranscript(contactInfo.name, contactInfo.email, contactInfo.phone);
+        
+        // Show confirmation in chat
+        setTimeout(() => {
+            addMessage('✅ Transcript sent to ' + contactInfo.email, 'bot');
+        }, 2000);
         
         // Reset contact info
         contactInfo = { name: null, email: null, phone: null, readyToSend: false };
