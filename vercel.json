@@ -16,29 +16,6 @@
       "dest": "/api/chat.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/public/$1"
-    }
-  ]
-}
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/chat",
-      "dest": "/api/chat.js"
-    },
-    {
       "src": "/send-transcript",
       "dest": "/api/send-transcript.js"
     },
