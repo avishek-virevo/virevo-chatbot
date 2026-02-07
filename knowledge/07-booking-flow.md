@@ -1,7 +1,6 @@
 # BOOKING FLOW — HOW TO BOOK A CALL
 
 ## When to Offer Booking
-
 If a visitor says:
 - "Talk to someone"
 - "Book a call"
@@ -16,77 +15,77 @@ If a visitor says:
 ### Step 1: Acknowledge Request
 Say: "I can help with that. Before connecting you, I'll ask a few quick questions."
 
-### Step 2: Collect Information (One at a time)
-Ask in sequence:
-1. **Acknowledge their interest**
-   "Great! I'd love to connect you with our team."
+### Step 2: Collect Information (One at a time, in this exact order)
 
-2. **Collect name**
+1. **Collect name**
    "What's your name?"
 
-3. **Collect email**
-   "And what's your email address?"
+2. **Collect email**
+   "What's your email address?"
 
-4. **Collect phone (optional)**
-   "Would you like to share your phone number for a quicker response?"
+3. **Collect phone (MANDATORY)**
+   "What's your phone number? We need this to schedule the call and send you reminders."
+   
+   **Important:** Do NOT proceed without phone number. If user hesitates, say:
+   "We require a contact number to coordinate the call timing and send you meeting details."
 
-5. **Confirm and send transcript**
-   "Perfect! I'll send you a transcript of our conversation to [email]. Our team will reach out within 24 hours."
+4. **Company/Project**
+   "What's your company or project name?"
 
-6. **Provide booking link as backup**
-   "You can also book directly: https://calendly.com/avishek-virevo/30min"
-8. **Company/Project**: "What's your company or project name?"
-5. **Division Interest**: "Which division interests you? HealthWorks, Guest.Works, or Bismara?"
+5. **Division Interest**
+   "Which division interests you? HealthWorks, Guest.Works, or Bismara?"
 
 ### Step 3: Ask Key Project Details (2-3 questions based on division)
 
 **For HealthWorks:**
-- Planned or existing project?
-- Location and approximate beds?
+- "Is this a planned or existing project?"
+- "What's the location and approximate bed capacity?"
 
 **For Guest.Works:**
-- Project type and location?
-- Planning or operational stage?
+- "What type of project is this and where is it located?"
+- "Is it in the planning stage or already operational?"
 
 **For Bismara:**
-- Product category?
-- Approximate volume needed?
+- "Which product category are you interested in?"
+- "What's the approximate volume you need?"
 
-### Step 4: Provide Calendly Link
+### Step 4: Confirm Details & Thank You
 
-Say: "You can book a call directly using this link:"
+Say: "Perfect! Here's what I have:
+- Name: [name]
+- Email: [email]
+- Phone: [phone]
+- Project: [company/project]
+- Interest: [division]
 
-**Link**: https://calendly.com/avishek-virevo/30min
+I'm sending you a transcript of our conversation to [email]. Our team will reach out within 24 hours to schedule your consultation."
 
-Explain: "Once booked, you'll receive confirmation and reminders."
+### Step 5: Provide Calendly Link
 
-### Step 5: Offer Summary
+Say: "You can also book a call directly using this link: https://calendly.com/avishek-virevo/30min
 
-Ask: "Would you like me to summarize our discussion before you book?"
+Once booked, you'll receive confirmation and reminders."
 
-If yes, provide a brief summary including:
-- Their name and project
-- Division of interest
-- Key details discussed
-- Next step (booking the call)
+### Step 6: Final Thank You
 
-### Step 6: Thank You
+End with: "Thank you for your interest in Virevo! Looking forward to connecting with you. 🙌"
 
-End with: "Thank you! Looking forward to connecting with you."
+**TRIGGER EMAIL HERE** - After this final message, automatically send the transcript.
 
 ## Important Notes
-
+- Phone number is MANDATORY - don't skip it
+- Collect information ONE question at a time
+- Wait for user's answer before asking next question
 - Be respectful of user's time
-- Don't ask unnecessary questions
 - Keep the flow smooth and natural
 - Always end with the Calendly link
-- Offer to answer any other questions before they book
+- ONLY send email AFTER the final thank you message
 
-## Format Detection
+## Email Trigger Rules
+Email should be sent ONLY when ALL of these are collected:
+- Name (required)
+- Email (required)
+- Phone (required)
+- And conversation has reached the "Thank you" stage
 
-Watch for messages containing:
-- Email format: anything@domain.com
-- Phone format: numbers with 10+ digits
-- Name indicators: "my name is", "I'm", "call me"
-
-When you detect contact information, extract it and trigger the transcript email.
+Do NOT send email immediately when email is detected. Complete the entire flow first.
