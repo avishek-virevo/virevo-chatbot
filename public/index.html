@@ -854,33 +854,70 @@ conversationHistory.push({
 // Detect contact information
 const detected = detectContactInfo(message);
 
+// Detect email
 if (detected.email && !contactInfo.email) {
     contactInfo.email = detected.email;
-    console.log('Email detected:', detected.email);
+    console.log('✅ Email detected:', detected.email);
 }
 
+// Detect phone
 if (detected.phone && !contactInfo.phone) {
     contactInfo.phone = detected.phone;
-    console.log('Phone detected:', detected.phone);
+    console.log('✅ Phone detected:', detected.phone);
 }
 
-// Try to extract name from conversation if not already set
-if (!contactInfo.name) {
-    const nameMention = conversationHistory.find(msg => 
-        msg.role === 'user' && 
-        (msg.content.toLowerCase().includes('my name is') || 
-         msg.content.toLowerCase().includes('i am') ||
-         msg.content.toLowerCase().includes('i\'m') ||
-         msg.content.toLowerCase().includes('this is'))
-    );
+// Detect name
+if (detected.name && !contactInfo.name) {
+    contactInfo.name = detected.name;
+    console.log('✅ Name detected:', detected.name);
+}
+
+// If name not detected via pattern, try context-based detection
+if (!contactInfo.name && conversationHistory.length > 0) {
+    // Look back at the previous bot message
+    const prevBotMsg = conversationHistory[conversationHistory.length - 2];
     
-    if (nameMention) {
-        const nameMatch = nameMention.content.match(/(?:my name is|i am|i'm|this is)\s+([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i);
-        if (nameMatch && nameMatch[1]) {
-            contactInfo.name = nameMatch[1].trim();
-            console.log('Name detected:', contactInfo.name);
+    // Only proceed if bot specifically asked "What's your name?" or "What is your name?"
+    if (prevBotMsg && 
+        prevBotMsg.role === 'assistant' && 
+        (prevBotMsg.content.toLowerCase().includes("what's your name") ||
+         prevBotMsg.content.toLowerCase().includes("what is your name"))) {
+        
+        // Current message should be the name
+        const possibleName = message.trim();
+        
+        // Validate it's a reasonable name
+        const isValidName = 
+            possibleName.length >= 2 && 
+            possibleName.length <= 40 && 
+            /^[a-zA-Z\s]+$/.test(possibleName) &&
+            // Exclude common phrases that aren't names
+            !possibleName.toLowerCase().includes('looking') &&
+            !possibleName.toLowerCase().includes('interested') &&
+            !possibleName.toLowerCase().includes('want') &&
+            !possibleName.toLowerCase().includes('need') &&
+            !possibleName.toLowerCase().includes('hello') &&
+            !possibleName.toLowerCase().includes('hi ') &&
+            // Must not be too many words (names are usually 1-3 words)
+            possibleName.split(' ').length <= 3;
+        
+        if (isValidName) {
+            contactInfo.name = possibleName;
+            console.log('✅ Name detected (context):', possibleName);
+        } else {
+            console.log('⚠️ Invalid name rejected:', possibleName);
         }
     }
+}
+
+// Check if we have all required info
+if (contactInfo.name && contactInfo.email && contactInfo.phone && !contactInfo.readyToSend) {
+    contactInfo.readyToSend = true;
+    console.log('🎉 All contact info collected!');
+    console.log('   Name:', contactInfo.name);
+    console.log('   Email:', contactInfo.email);
+    console.log('   Phone:', contactInfo.phone);
+    console.log('   Ready to send transcript on trigger phrase...');
 }
 
 // Store flag to send transcript after bot's final thank you message
@@ -1016,15 +1053,45 @@ if (contactInfo.readyToSend &&
             }
         });
 
-        // Detect and extract contact information
+     // Detect and extract contact information
 function detectContactInfo(message) {
+    const result = { email: null, phone: null, name: null };
+    
+    // Email detection
     const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
-    const phoneRegex = /(?:\+?(\d{1,3}))?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})/;
+    const emailMatch = message.match(emailRegex);
+    if (emailMatch) {
+        result.email = emailMatch[0];
+    }
     
-    const email = message.match(emailRegex)?.[0];
-    const phone = message.match(phoneRegex)?.[0];
+    // Phone detection - more flexible
+    // Matches: +919876543210, 9876543210, +91-98765-43210, (987) 654-3210, etc.
+    const phoneRegex = /(?:\+?91[-.\s]?)?(?:\(?\d{3,5}\)?[-.\s]?)?\d{3,4}[-.\s]?\d{4}/;
+    const phoneMatch = message.match(phoneRegex);
+    if (phoneMatch) {
+        // Extract only digits
+        const digitsOnly = phoneMatch[0].replace(/\D/g, '');
+        // Keep if it has at least 10 digits
+        if (digitsOnly.length >= 10) {
+            result.phone = phoneMatch[0];
+        }
+    }
     
-    return { email, phone };
+    // Name detection - check for common patterns
+    const namePatternsToCheck = [
+        /(?:my name is|i am|i'm|this is|call me)\s+([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i,
+        /^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)$/  // Just a capitalized name
+    ];
+    
+    for (const pattern of namePatternsToCheck) {
+        const nameMatch = message.match(pattern);
+        if (nameMatch && nameMatch[1]) {
+            result.name = nameMatch[1].trim();
+            break;
+        }
+    }
+    
+    return result;
 }
 
 // Send transcript via email
