@@ -66,11 +66,16 @@ Say: "You can also book a call directly using this link: https://calendly.com/av
 
 Once booked, you'll receive confirmation and reminders."
 
-### Step 6: Final Thank You
+### Step 6: Confirm & Send Transcript
 
-End with: "Thank you for your interest in Virevo! Looking forward to connecting with you. 🙌"
+Say EXACTLY this (word for word):
+"Perfect! I'm sending you a transcript of our conversation to [email]. Our team will reach out within 24 hours. Thank you for your interest in Virevo! 🙌"
 
-**TRIGGER EMAIL HERE** - After this final message, automatically send the transcript.
+**CRITICAL:** The phrase "I'm sending you a transcript" triggers the email system. Do not skip this exact phrase.
+
+### Step 7: Provide Calendly Link
+
+Say: "You can also book a call directly using this link: https://calendly.com/avishek-virevo/30min"
 
 ## Important Notes
 - Phone number is MANDATORY - don't skip it
