@@ -23,8 +23,12 @@ export default async function handler(req, res) {
         const { name, email, phone, transcript, userMessage } = req.body;
 
         if (!email || !transcript) {
-            return res.status(400).json({ error: 'Email and transcript are required' });
-        }
+    return res.status(400).json({ error: 'Email and transcript are required' });
+}
+
+if (!phone) {
+    return res.status(400).json({ error: 'Phone number is required' });
+}
 
         // Initialize SendGrid
         const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
@@ -64,7 +68,7 @@ New Lead from Virevo Chatbot
 Contact Information:
 - Name: ${name || 'Not provided'}
 - Email: ${email}
-- Phone: ${phone || 'Not provided'}
+- Phone: ${phone}
 - Date: ${timestamp}
 
 Last Message:
