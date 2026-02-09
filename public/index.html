@@ -574,63 +574,70 @@
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .chat-window {
-                bottom: 0;
-                right: 0;
-                left: 0;
-                width: 100%;
-                max-width: 100%;
-                height: 100vh;
-                max-height: 100vh;
-                border-radius: 0;
-            }
+    .chat-window {
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
 
-            .chat-header {
-                border-radius: 0;
-            }
+    .chat-header {
+        border-radius: 0;
+    }
 
-            .chat-message-bubble {
-                display: none;
-            }
+    .chat-message-bubble {
+        display: none;
+    }
 
-            .chat-widget-button {
-                bottom: 20px;
-                right: 20px;
-            }
+    .chat-widget-button {
+        bottom: 20px;
+        right: 20px;
+    }
 
-            .chat-avatar-button {
-                width: 64px;
-                height: 64px;
-            }
+    .chat-avatar-button {
+        width: 64px;
+        height: 64px;
+    }
+    
+    /* Add extra padding to input area on mobile */
+    .chat-input-area {
+        padding: 16px 20px 30px 20px;
+        margin-bottom: env(safe-area-inset-bottom, 20px);
+    }
 
-            .message-content {
-                font-size: 10px;
-            }
+    .message-content {
+        font-size: 10px;
+    }
 
-            .chat-input {
-                font-size: 10px;
-            }
+    .chat-input {
+        font-size: 10px;
+    }
 
-            .quick-question-btn {
-                font-size: 10px;
-            }
+    .quick-question-btn {
+        font-size: 10px;
+    }
 
-            .welcome-message h4 {
-                font-size: 10px;
-            }
+    .welcome-message h4 {
+        font-size: 10px;
+    }
 
-            .welcome-message p {
-                font-size: 8px;
-            }
+    .welcome-message p {
+        font-size: 8px;
+    }
 
-            .chat-header-text h3 {
-                font-size: 10px;
-            }
+    .chat-header-text h3 {
+        font-size: 10px;
+    }
 
-            .chat-header-text p {
-                font-size: 8px;
-            }
-        }
+    .chat-header-text p {
+        font-size: 8px;
+    }
+}
 
         /* Hidden class */
         .hidden {
