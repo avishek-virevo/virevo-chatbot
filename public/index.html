@@ -604,11 +604,11 @@
         height: 64px;
     }
     
-    /* Add extra padding to input area on mobile */
-    .chat-input-area {
-        padding: 16px 20px 30px 20px;
-        margin-bottom: env(safe-area-inset-bottom, 20px);
-    }
+   /* Add extra padding to input area on mobile */
+.chat-input-area {
+    padding: 16px 20px 50px 20px;
+    margin-bottom: max(env(safe-area-inset-bottom, 0px), 60px);
+}
 
     .message-content {
         font-size: 10px;
